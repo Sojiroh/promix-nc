@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 public class App {
 	private static Path dirDTE;
     public static void main( String[] args ) throws Exception {
-        dirDTE = Paths.get(System.getProperty("user.home"), "Downloads", "dtes");
+        dirDTE = Paths.get("D:\\Descargas\\dtes");
         if (Files.notExists(dirDTE))
         	Files.createDirectories(dirDTE);
         
@@ -52,7 +52,7 @@ public class App {
 				bean.setTipoDTE("61");		
 				bean.setRutEmisor("96579920-6");
                                 bean.setFolioDTE(Integer.toString(folito));
-				Transforma.toTXT57(bean);
+				Transforma.toTXTtextual(bean);
 				System.out.println(bean.getTXT());
 				
 				
@@ -62,7 +62,7 @@ public class App {
 				
 				System.out.println("folio: " + folio);
 
-                            File file = new File(Paths.get(System.getProperty("user.home"), "Downloads", "dtes", "txt")+"/"+bean.getRutEmisor()+"_T"+bean.getTipoDTE()+"_F"+bean.getFolioDTE()+".txt");
+                            File file = new File(Paths.get("D:\\Descargas\\dtes\\txt")+"\\"+bean.getRutEmisor()+"_T"+bean.getTipoDTE()+"_F"+bean.getFolioDTE()+".txt");
                             //File file = new File(Paths.get(System.getProperty("user.home"), "Downloads", "jc", "txt")+"/"+bean.getFolioDTE()+"."+folito+".txt");
                                 
                  // if file doesnt exists, then create it
