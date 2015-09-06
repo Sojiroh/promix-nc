@@ -205,13 +205,15 @@ public class Transforma {
 			encabezado += "A1;";
 			encabezado += XMLdom.valueOf("//Encabezado/Emisor/Acteco") + ";";
 			encabezado += "\n";
-                        
-            encabezado += "A2;";
-			encabezado += XMLdom.valueOf("//Encabezado/Totales/ImptoReten/TipoImp") + ";";
-            encabezado += XMLdom.valueOf("//Encabezado/Totales/ImptoReten/TasaImp") + ";";
-            encabezado += XMLdom.valueOf("//Encabezado/Totales/ImptoReten/MontoImp") + ";";
+            //Impuestos adicionales            
+			List<Node> a2List = XMLdom.selectNodes("//Encabezado/Totales/ImptoReten");
+			for (Node detalle : a2List) {
+			encabezado += "A2;";
+			encabezado += detalle.valueOf("TipoImp") + ";";
+            encabezado += detalle.valueOf("TasaImp") + ";";
+            encabezado += detalle.valueOf("MontoImp") + ";";
 			encabezado += "\n";
-
+			}
 			String detalles = "";
 
 			int nroLinDet = 0;
@@ -421,7 +423,7 @@ public class Transforma {
 
 			encabezado += XMLdom.valueOf("//Encabezado/Emisor/RUTEmisor") + ";"; // pos_18_RUT
 																					// Emisor
-			encabezado += XMLdom.valueOf("//Encabezado/Emisor/RznSoc") + ";"; // pos_19_Nombre
+			encabezado += XMLdom.valueOf("//Encabezado/Emisor/RznSocEmisor") + ";"; // pos_19_Nombre
 																				// o
 																				// Razï¿½n
 																				// Social
@@ -530,7 +532,7 @@ public class Transforma {
 			encabezado += "\n";
 
 			// ACTECO
-			encabezado += "A1;519000;";
+			encabezado += "A1;222200;";
 			encabezado += "\n";
 
 
@@ -2054,7 +2056,348 @@ public class Transforma {
 		bean.setTXT(txt);
 	}
 
+	public static void toEmotions(DTEBean bean) throws Exception {
+		String txt = "";
 
+		Document XMLdom = null;
+		try {
+			SAXReader saxReader = new SAXReader();
+			XMLdom = saxReader.read(new StringReader(bean.getContenido()));
+
+			// Variables Libres
+			String varLibre = "";
+			varLibre += "A0;";
+			varLibre += ";";
+			varLibre += ";";
+			varLibre += ";";
+			varLibre += ";";
+			varLibre += ";";
+			varLibre += ";";
+			varLibre += ";";
+			varLibre += ";";
+			varLibre += ";";
+			varLibre += ";";
+			varLibre += "\n";
+
+			// Se asigna a folio
+			bean.setRutEmisor(XMLdom.valueOf("//Encabezado/Emisor/RUTEmisor"));
+			bean.setTipoDTE(XMLdom.valueOf("//Encabezado/IdDoc/TipoDTE"));
+			bean.setFolioDTE(XMLdom.valueOf("//Encabezado/IdDoc/Folio"));
+			bean.setSucursalEmisorDTE(XMLdom
+					.valueOf("//Encabezado/Emisor/Sucursal"));
+
+			String encabezado = "";
+			encabezado += "A;";
+			
+			//TODO 
+			encabezado += XMLdom.valueOf("//Encabezado/IdDoc/TipoDTE") + ";"; // pos_1_Tipo
+																				// de
+																				// Documento
+																				// Tributario
+																				// Electrï¿½nico
+			encabezado += ";"; // pos_2_Tipo Impresiï¿½n
+			encabezado += XMLdom.valueOf("//Encabezado/IdDoc/Folio") + ";"; // pos_3_FOLIO-Documento
+			
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			String formattedDate = formatter.format(new Date());
+			encabezado += XMLdom.valueOf("//Encabezado/IdDoc/FchEmis") + ";"; // pos_4_Fecha
+																				// de
+																				// Emisiï¿½n
+			encabezado += XMLdom.valueOf("//Encabezado/IdDoc/IndNoRebaja")
+					+ ";"; // pos_5_Indicador de No Rebaja
+			encabezado += XMLdom.valueOf("//Encabezado/IdDoc/TipoDespacho")
+					+ ";"; // pos_6_Tipo Despacho
+			encabezado += XMLdom.valueOf("//Encabezado/IdDoc/IndTraslado")
+					+ ";"; // pos_7_Indicador Tipo de Translado de bienes
+			encabezado += XMLdom.valueOf("//Encabezado/IdDoc/IndServicio")
+					+ ";"; // pos_8_Indicador Servicio
+			encabezado += XMLdom.valueOf("//Encabezado/IdDoc/MntBruto") + ";"; // pos_9_Indicador
+																				// Montos
+																				// Brutos
+			encabezado += ";"; // pos_10_Forma
+																				// de
+																				// Pago
+			encabezado += XMLdom.valueOf("//Encabezado/IdDoc/FchCancel") + ";"; // pos_11_Fecha
+																				// de
+																				// Cancelaciï¿½n
+			encabezado += XMLdom.valueOf("//Encabezado/IdDoc/PeriodoDesde")
+					+ ";"; // pos_12_Periodo desde
+			encabezado += XMLdom.valueOf("//Encabezado/IdDoc/PeriodoHasta")
+					+ ";"; // pos_13_Periodo hasta
+			encabezado += XMLdom.valueOf("//Encabezado/IdDoc/MedioPago") + ";"; // pos_14_Medio
+																				// de
+																				// Pago
+			encabezado += XMLdom.valueOf("//Encabezado/IdDoc/TermPagoCdg")
+					+ ";"; // pos_15_Tï¿½rmino de Pago, cï¿½digo
+			encabezado += XMLdom.valueOf("//Encabezado/IdDoc/TermPagoDias")
+					+ ";"; // pos_16_Tï¿½rmino de Pago, dï¿½as
+			encabezado += ";"; // pos_17_Fecha
+																				// de
+																				// Vencimiento
+
+			encabezado += XMLdom.valueOf("//Encabezado/Emisor/RUTEmisor") + ";"; // pos_18_RUT
+																					// Emisor
+			encabezado += XMLdom.valueOf("//Encabezado/Emisor/RznSoc") + ";"; // pos_19_Nombre
+																				// o
+																				// Razï¿½n
+																				// Social
+																				// Emisor
+			encabezado += XMLdom.valueOf("//Encabezado/Emisor/GiroEmis") + ";"; // pos_20_Giro
+																				// del
+																				// Negocio
+																				// del
+																				// Emisor
+			encabezado += XMLdom.valueOf("//Encabezado/Emisor/Sucursal") + ";"; // pos_21_Sucursal
+			encabezado += XMLdom.valueOf("//Encabezado/Emisor/CdgSIISucur")
+					+ ";"; // pos_22_Cï¿½digo Sucursal
+			encabezado += XMLdom.valueOf("//Encabezado/Emisor/DirOrigen") + ";"; // pos_23_Direcciï¿½n
+																					// Origen
+			encabezado += XMLdom.valueOf("//Encabezado/Emisor/CmnaOrigen")
+					+ ";"; // pos_24_Comuna Origen
+			encabezado += XMLdom.valueOf("//Encabezado/Emisor/CiudadOrigen")
+					+ ";"; // pos_25_Ciuidad Origen
+			encabezado += XMLdom.valueOf("//Encabezado/IdDoc/CdgVendedor")
+					+ ";"; // pos_26_Cï¿½digo del Vendedor
+
+			encabezado += XMLdom.valueOf("//Encabezado/RUTMandante") + ";"; // pos_27_RUT
+																			// Mandante
+
+			encabezado += XMLdom.valueOf("//Encabezado/Receptor/RUTRecep")
+					+ ";"; // pos_28_RUT Receptor
+			encabezado += XMLdom.valueOf("//Encabezado/Receptor/CdgIntRecep")
+					+ ";"; // pos_29_Cï¿½digo Interno del Receptor
+			encabezado += XMLdom.valueOf("//Encabezado/Receptor/RznSocRecep")
+					+ ";"; // pos_30_Nombre o Razï¿½n Social Receptor
+			encabezado += XMLdom.valueOf("//Encabezado/Receptor/GiroRecep")
+					+ ";"; // pos_31_Giro del Negocio del Receptor
+			encabezado += XMLdom.valueOf("//Encabezado/Receptor/Contacto")
+					+ ";"; // pos_32_Contacto receptor
+			encabezado += XMLdom.valueOf("//Encabezado/Receptor/DirRecep")
+					+ ";"; // pos_33_Direcciï¿½n Receptor
+			encabezado += XMLdom.valueOf("//Encabezado/Receptor/CmnaRecep")
+					+ ";"; // pos_34_Comuna Receptor
+			encabezado += XMLdom.valueOf("//Encabezado/Receptor/CiudadRecep")
+					+ ";"; // pos_35_Ciudad Receptor
+			encabezado += XMLdom.valueOf("//Encabezado/Receptor/DirPostal")
+					+ ";"; // pos_36_Direcciï¿½n Postal
+			encabezado += XMLdom.valueOf("//Encabezado/Receptor/CmnaPostal")
+					+ ";"; // pos_37_Comuna Postal
+			encabezado += XMLdom.valueOf("//Encabezado/Receptor/CiudadPostal")
+					+ ";"; // pos_38_Ciudad Postal
+
+			encabezado += XMLdom.valueOf("//Encabezado/RUTSolicita") + ";"; // pos_39_RUT
+																			// de
+																			// Solicitante
+																			// de
+																			// Factura
+
+			encabezado += XMLdom.valueOf("//Encabezado/Transporte/Patente")
+					+ ";"; // pos_40_Informaciï¿½n Transporte (Patente)
+			encabezado += XMLdom.valueOf("//Encabezado/Transporte/RUTTrans")
+					+ ";"; // pos_41_RUT Transportista
+			encabezado += XMLdom.valueOf("//Encabezado/Transporte/DirDest")
+					+ ";"; // pos_42_Direcciï¿½n Destino
+			encabezado += XMLdom.valueOf("//Encabezado/Transporte/CmnaDest")
+					+ ";"; // pos_43_Comuna Destino
+			encabezado += XMLdom.valueOf("//Encabezado/Transporte/CiudadDest")
+					+ ";"; // pos_44_Ciudad Destino
+
+			encabezado += XMLdom.valueOf("//Encabezado/Totales/MntNeto") + ";"; // pos_45_Monto
+																				// Neto
+			encabezado += XMLdom.valueOf("//Encabezado/Totales/MntExe") + ";"; // pos_46_Monto
+																				// No
+																				// Afecto
+																				// o
+																				// Exento
+			encabezado += XMLdom.valueOf("//Encabezado/Totales/MntBase") + ";"; // pos_47_Monto
+																				// base
+																				// faenamiento
+																				// carne
+			encabezado += XMLdom.valueOf("//Encabezado/Totales/TasaIVA") + ";"; // pos_48_Tasa
+																				// IVA
+			encabezado += XMLdom.valueOf("//Encabezado/Totales/IVA") + ";"; // pos_49_IVA
+			encabezado += XMLdom.valueOf("//Encabezado/Totales/IVANoRet") + ";"; // pos_50_IVA
+																					// no
+																					// Retenido
+			encabezado += XMLdom.valueOf("//Encabezado/Totales/CredEC") + ";"; // pos_51_Crï¿½dito
+																				// especial
+																				// 65%
+																				// Empresas
+																				// Contructoras
+			encabezado += XMLdom.valueOf("//Encabezado/Totales/MontoPeriodo")
+					+ ";"; // pos_52_Monto Perï¿½odo
+			encabezado += XMLdom.valueOf("//Encabezado/Totales/GrntDep") + ";"; // pos_53_Garantia
+																				// por
+																				// deposito
+																				// o
+																				// envases
+																				// o
+																				// embalajes
+			encabezado += XMLdom.valueOf("//Encabezado/Totales/MontoNF") + ";"; // pos_54_Monto
+																				// No
+																				// Facturable
+			encabezado += XMLdom.valueOf("//Encabezado/Totales/MntTotal") + ";"; // pos_55_Monto
+																					// Total
+			encabezado += XMLdom.valueOf("//Encabezado/Totales/SaldoAnterior")
+					+ ";"; // pos_56_Saldo Anterior
+			encabezado += XMLdom.valueOf("//Encabezado/Totales/VlrPagar") + ";"; // pos_57_Valor
+																					// a
+																					// pagar
+			encabezado += "\n";
+
+			// ACTECO
+			encabezado += "A1;";
+			encabezado += XMLdom.valueOf("//Encabezado/Emisor/Acteco") + ";";
+			encabezado += "\n";
+			
+			List<Node> a2List = XMLdom.selectNodes("//Encabezado/Totales/ImptoReten");
+			for (Node detalle : a2List) {
+			encabezado += "A2;";
+			encabezado += detalle.valueOf("TipoImp") + ";";
+            encabezado += detalle.valueOf("TasaImp") + ";";
+            encabezado += detalle.valueOf("MontoImp") + ";";
+			encabezado += "\n";
+			}
+
+			String detalles = "";
+
+			int nroLinDet = 0;
+			@SuppressWarnings("unchecked")
+			List<Node> detalleList = XMLdom.selectNodes("//Detalle");
+			for (Node detalle : detalleList) {
+//				if (detalle.valueOf("IndExe").contains("2"))
+//					continue;
+				
+				nroLinDet++;
+				detalles += "B;";
+				detalles += nroLinDet + ";"; // pos_1_Nï¿½ de
+																// Lï¿½nea o Nï¿½
+																// Secuencial
+				detalles += detalle.valueOf("IndExe") + ";"; // pos_2_Indicador
+																// de
+																// facturaciï¿½n/
+																// exenciï¿½n
+				detalles += detalle.valueOf("NmbItem") + ";"; // pos_3_Nombre
+																// del ï¿½tem
+				detalles += detalle.valueOf("DscItem") + ";"; // pos_4_Descripciï¿½n
+																// Adicional
+				detalles += detalle.valueOf("QtyRef") + ";"; // pos_5_Cantidad
+																// de Referencia
+				detalles += detalle.valueOf("UnmdRef") + ";"; // pos_6_Unidad de
+																// Medida de
+																// Referencia
+				detalles += detalle.valueOf("PrcRef") + ";"; // pos_7_Precio de
+																// Referencia
+				detalles += detalle.valueOf("QtyItem") + ";"; // pos_8_Cantidad
+																// del ï¿½tem
+				detalles += detalle.valueOf("FchElabor") + ";"; // pos_9_Fecha
+																// Eleboraciï¿½n
+				detalles += detalle.valueOf("FchVencim") + ";"; // pos_10_Fecha
+																// Vencimiento
+				detalles += detalle.valueOf("UnmdItem") + ";"; // pos_11_Unidad
+																// de Medida
+				detalles += detalle.valueOf("PrcItem") + ";"; // pos_12_Precio
+																// Unitario del
+																// ï¿½tem
+				detalles += ";"; // pos_13_Precio Unitario en Otra Moneda
+				detalles += ";"; // pos_14_Cï¿½digo de Otra Moneda
+				detalles += ";"; // pos_15_Factor de Conversiï¿½n
+				detalles += detalle.valueOf("DescuentoPct") + ";"; // pos_16_Descuento
+																	// en %
+				detalles += detalle.valueOf("DescuentoMonto") + ";"; // pos_17_Monto
+																		// Descuento
+				detalles += detalle.valueOf("RecargoPct") + ";"; // pos_18_Recargo
+																	// en %
+				detalles += detalle.valueOf("RecargoMonto") + ";"; // pos_19_Monto
+																	// de
+																	// Recargo
+				detalles += detalle.valueOf("CodImpAdic") + ";"; // pos_20_Cï¿½digo
+																	// Impuesto
+																	// o
+																	// Retenciones
+				detalles += detalle.valueOf("MontoItem") + ";"; // pos_21_Monto
+																// de ï¿½tem
+				detalles += "\n";
+
+				if (detalle.valueOf("CdgItem/VlrCodigo") != null
+						&& !detalle.valueOf("CdgItem/TpoCodigo").trim()
+								.isEmpty()) {
+					detalles += "B2" + ";";
+					detalles += detalle.valueOf("CdgItem/TpoCodigo") + ";";
+					detalles += detalle.valueOf("CdgItem/VlrCodigo") + ";";
+					detalles += "\n";
+				}
+			}
+
+			String recargosDescuentos = "";
+			@SuppressWarnings("unchecked")
+			List<Node> descRecaList = XMLdom.selectNodes("//DscRcgGlobal");
+			for (Node descReca : descRecaList) {
+				recargosDescuentos += "C;";
+				recargosDescuentos += descReca.valueOf("NroLinDR") + ";"; // pos_1_Nï¿½
+																			// de
+																			// Lï¿½nea
+																			// o
+																			// Nï¿½
+																			// Secuencial
+				recargosDescuentos += descReca.valueOf("TpoMov") + ";"; // pos_2_Tipo
+																		// de
+																		// Movimiento
+				recargosDescuentos += descReca.valueOf("GlosaDR") + ";"; // pos_3_Glosa
+				recargosDescuentos += descReca.valueOf("TpoValor") + ";"; // pos_4_Tipo
+																			// de
+																			// Valor
+				recargosDescuentos += descReca.valueOf("ValorDR") + ";"; // pos_5_Valor
+				recargosDescuentos += descReca.valueOf("IndExeDR") + ";"; // pos_6_Indicador
+																			// de
+																			// facturaciï¿½n/
+																			// exenciï¿½n
+				recargosDescuentos += "\n";
+			}
+
+			String referencias = "";
+                        @SuppressWarnings("unchecked")
+			List<Node> refe = XMLdom.selectNodes("//Referencia");
+                        for (Node descReca : refe) {
+			referencias += "D;";
+			bean.setCodigoEmotions( descReca.valueOf("RazonRef"));
+			referencias += descReca.valueOf("NroLinRef")+";"; // pos_1_Nï¿½ de Lï¿½nea 
+			referencias += descReca.valueOf("TpoDocRef") + ";"; // pos_2_Tipo
+															// Documento de
+															// referencia
+			referencias += ";"; // pos_3_Indicador
+															// de Referencia
+															// Global
+                        
+                        if (descReca.valueOf("FolioRef").contains("NV/")){
+                            referencias += descReca.valueOf("FolioRef").replace("NV/", "") + ";";
+                        } else if (descReca.valueOf("FolioRef").contains("SRV-PDL-")){
+                            referencias += descReca.valueOf("FolioRef").replace("SRV-PDL-", "") + ";";
+                        }else if (descReca.valueOf("FolioRef").contains("NV-")){
+                            referencias += descReca.valueOf("FolioRef").replace("NV-", "") + ";";
+                        }else
+			referencias += descReca.valueOf("FolioRef") + ";"; // pos_4_FOLIO-
+															// de referencia
+			referencias += ";"; // pos_5_RUT Otro
+															// contribuyente
+			referencias += descReca.valueOf("FchRef") + ";"; // pos_6_FECHA de
+															// la Referencia                                             
+			referencias += descReca.valueOf("CodRef") + ";";// pos_7_Cï¿½digo de
+															// referencia
+			referencias += descReca.valueOf("RazonRef") + ";"; // pos_8_Razï¿½n
+															// referencia
+			referencias += "\n";
+                        }
+
+			txt = varLibre + encabezado + detalles + recargosDescuentos
+					+ referencias;
+
+		} catch (Exception e) {
+			throw new Exception("ERROR al parserar XML: " + e.getMessage(), e);
+		}
+
+		bean.setTXT(txt);
+	}
 
 
 }

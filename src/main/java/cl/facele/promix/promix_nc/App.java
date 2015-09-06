@@ -35,7 +35,7 @@ public class App {
 		Transforma tr;
 		long folio=0;
                 //int folito=55101;
-                int folito=142569;
+                int folito=131601;
 		try {
 			directory = Files.newDirectoryStream(dirDTE);
 			//Obtiene folio menor
@@ -52,7 +52,7 @@ public class App {
 				bean.setTipoDTE("61");		
 				bean.setRutEmisor("96579920-6");
                                 bean.setFolioDTE(Integer.toString(folito));
-				Transforma.toTXTtextual(bean);
+				Transforma.toTXT57(bean);
 				System.out.println(bean.getTXT());
 				
 				
@@ -63,7 +63,9 @@ public class App {
 				System.out.println("folio: " + folio);
 
                             File file = new File(Paths.get("D:\\Descargas\\dtes\\txt")+"\\"+bean.getRutEmisor()+"_T"+bean.getTipoDTE()+"_F"+bean.getFolioDTE()+".txt");
-                            //File file = new File(Paths.get(System.getProperty("user.home"), "Downloads", "jc", "txt")+"/"+bean.getFolioDTE()+"."+folito+".txt");
+//                            File file = new File(Paths.get("D:\\Descargas\\dtes\\txt")+"\\"+bean.getFolioDTE()+"."+bean.getCodigoEmotions());
+
+                            //                            File file = new File(Paths.get("D:\\Descargas\\dtes\\txt")+"/"+bean.getFolioDTE()+"."+folito+".txt");
                                 
                  // if file doesnt exists, then create it
                  if (!file.exists()) {

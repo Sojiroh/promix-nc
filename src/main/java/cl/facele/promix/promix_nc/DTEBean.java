@@ -11,9 +11,22 @@ public class DTEBean {
 	private File fileXML;
 	private String contenidoTXT;
 	private String sucursalEmisorDTE;
+	private String codigoEmotions;
+	
+	
         private String descuento;
         
-         public String getDescuento() {
+        
+        
+         public String getCodigoEmotions() {
+			return codigoEmotions;
+		}
+
+		public void setCodigoEmotions(String codigoEmotions) {
+			this.codigoEmotions = codigoEmotions;
+		}
+
+		public String getDescuento() {
             return descuento;
         }
 
